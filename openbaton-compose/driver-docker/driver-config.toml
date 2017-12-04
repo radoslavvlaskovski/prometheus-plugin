@@ -1,0 +1,7 @@
+type        = "docker"
+workers     = 5
+username    = "openbaton-manager-user"
+password    = "openbaton"
+logLevel    = "DEBUG"
+brokerIp    = "192.168.99.100"
+brokerPort  = 5672

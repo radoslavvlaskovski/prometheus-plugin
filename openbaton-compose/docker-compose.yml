@@ -1,0 +1,40 @@
+version: '3'
+services:
+  nfvo:
+    image: openbaton/nfvo:latest
+    depends_on:
+      - rabbitmq_broker
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    environment: 
+      - NFVO_RABBIT_BROKERIP=192.168.99.100 # for use in userdata.sh in vnfm-generic
+      - NFVO_MONITORING_IP=${ZABBIX_IP}
+      - NFVO_PLUGIN_INSTALLATION-DIR=/dev/null
+      - SPRING_RABBITMQ_HOST=rabbitmq_broker
+    ports:
+      - "8080:8080"
+  vnfm-docker:
+    build: vnfm-docker
+    entrypoint: ./goapp -conf vnfm-config.toml
+    depends_on:
+      - nfvo
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+  rabbitmq_broker:
+    image: rabbitmq:3-management-alpine
+    hostname: openbaton-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=openbaton
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  driver-docker:
+    build: driver-docker
+    depends_on:
+      - nfvo
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
