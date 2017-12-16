@@ -1,4 +1,3 @@
-package org.openbaton.monitoring.agent;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
