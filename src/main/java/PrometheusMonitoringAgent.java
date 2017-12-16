@@ -20,10 +20,6 @@ import org.openbaton.catalogue.mano.common.monitoring.ThresholdType;
 import org.openbaton.catalogue.nfvo.EndpointType;
 import org.openbaton.catalogue.nfvo.Item;
 import org.openbaton.exceptions.MonitoringException;
-import org.openbaton.monitoring.agent.ZabbixMonitoringAgent.MyHandler;
-import org.openbaton.monitoring.agent.performance.management.catalogue.PmJob;
-import org.openbaton.monitoring.agent.performance.management.catalogue.Threshold;
-import org.openbaton.monitoring.agent.zabbix.api.ZabbixApiManager;
 import org.openbaton.monitoring.interfaces.MonitoringPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,18 +41,18 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
 	private Random random = new Random();
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	private List<AlarmEndpoint> subscriptions;
-	private Map<String, PmJob> pmJobs;
-	private Map<String, Threshold> thresholds;
+	//private Map<String, PmJob> pmJobs;
+	//private Map<String, Threshold> thresholds;
 	private Map<String, List<Alarm>> datacenterAlarms;
 	private String type;
 	private Map<String, List<String>> triggerIdHostnames;
 	private Map<String, String> triggerIdActionIdMap;
-	private LimitedQueue<State> history;
+	//private LimitedQueue<State> history;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	
 	  //Server properties
 	private HttpServer server;	
-	private MyHandler myHandler;
+	//private MyHandler myHandler;
 	
 	@Override
 	public String subscribeForFault(AlarmEndpoint filter) throws MonitoringException {

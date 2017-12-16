@@ -16,7 +16,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-public class PrometheusSender implements RestSender {
+public class PrometheusSender {
 
 	  private Logger log = LoggerFactory.getLogger(this.getClass());
 	  private Gson mapper = new GsonBuilder().setPrettyPrinting().create();
@@ -49,7 +49,6 @@ public class PrometheusSender implements RestSender {
 	    }
 	  }
 
-	  @Override
 	  public synchronized HttpResponse<String> doRestCallWithJson(
 	      String url, String json, HttpMethod method, String contentType) throws UnirestException {
 	    HttpResponse<String> response = null;
