@@ -13,6 +13,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mashape.unirest.http.HttpMethod;
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -82,6 +83,30 @@ public class PrometheusSender {
 	        break;
 	    }
 	    return response;
+	  }
+	  
+	  // Make a GET request to the Prometheus HTTP API, returning JsonObject
+	  public JsonObject callGet(String query) throws MonitoringException, UnirestException {
+		  if(!isAvailable) throw new MonitoringException("Prometheus Server is not reachable");
+		  HttpResponse<String> jsonResponse = Unirest.get(prometheusURL + query).asString();
+		  JsonElement jsonResponseEl = null;
+		  
+		  try {
+			  jsonResponseEl = mapper.fromJson(jsonResponse.getBody(), JsonElement.class);
+		  } catch (Exception e) {
+			  log.error("Could not map the Prometheus server's response to JsonElement", e);
+			  throw new MonitoringException("Could not map the Prometheus server's response to JsonElement", e);
+		  }
+		  
+		  if(jsonResponseEl == null) throw new MonitoringException(
+				  "The json received from Prometheus Server is null");
+		  
+		  if(!jsonResponseEl.isJsonObject()) {
+			  throw new MonitoringException("The json received from Prometheus Server is not a JsonObject");
+		  } else {
+			  JsonObject jsonResponseObj = jsonResponseEl.getAsJsonObject();
+			  return jsonResponseObj;
+		  }
 	  }
 
 	  public JsonObject callPost(String content, String method) throws MonitoringException {
