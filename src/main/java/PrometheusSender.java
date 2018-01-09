@@ -222,7 +222,7 @@ public class PrometheusSender {
 	      }
 	      if (!isAvailable) {
 	        isAvailable = true;
-	        log.info("Connected to Zabbix " + prometheusVersion + " at url: " + prometheusURL);
+	        log.info("Connected to Prometheus " + prometheusVersion + " at url: " + prometheusURL);
 	        log.debug("trying autentication..");
 	        try {
 	          authenticateToPrometheus();
