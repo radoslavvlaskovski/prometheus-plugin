@@ -28,25 +28,33 @@ public class PrometheusSender {
 	  private String password;
 	  protected boolean isAvailable;
 	  private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-
-	  public PrometheusSender(
-	      String prometheusHost,
-	      String prometheusPort,
-	      String prometheusEndpoint,
-	      Boolean prometheusSsl,
-	      String username,
-	      String password) {
-	    this.prometheusHost = prometheusHost;
-	    this.username = username;
-	    this.password = password;
-	    String protocol = prometheusSsl ? "https://" : "http://";
-
-	    if (prometheusPort == null || prometheusPort.equals("")) {
-	      prometheusURL = protocol + prometheusHost + prometheusEndpoint;
-	    } else {
-	      prometheusURL = protocol + prometheusHost + ":" + prometheusPort + prometheusEndpoint;
-	      this.prometheusPort = prometheusPort;
-	    }
+	  
+	  /*
+	   * 6 types of Prometheus HTTP API Endpoints:
+	   * 	- Instant queries: /api/v1/query
+	   * 	- Range queries: /api/v1/query_range
+	   * 	- Finding series by label matchers: /api/v1/series
+	   * 	- Querying label values: /api/v1/label/<label_name>/values
+	   * 	- Targets: /api/v1/targets
+	   * 	- Alertmanagers: /api/v1/alertmanagers
+	   */
+	  public PrometheusSender(String prometheusHost,
+			  String prometheusPort,
+			  String prometheusEndpoint,
+			  Boolean prometheusSsl,
+			  String username,
+			  String password) {
+		  this.prometheusHost = prometheusHost;
+		  this.username = username;
+		  this.password = password;
+		  String protocol = prometheusSsl ? "https://" : "http://";
+		  
+		  if (prometheusPort == null || prometheusPort.equals("")) {
+			  prometheusURL = protocol + prometheusHost + prometheusEndpoint;
+		  } else {
+			  prometheusURL = protocol + prometheusHost + ":" + prometheusPort + prometheusEndpoint;
+			  this.prometheusPort = prometheusPort;
+		  }
 	  }
 
 	  public synchronized HttpResponse<String> doRestCallWithJson(
