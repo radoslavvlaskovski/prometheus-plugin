@@ -10,6 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.google.gson.*;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.openbaton.catalogue.mano.common.monitoring.AbstractVirtualizedResourceAlarm;
 import org.openbaton.catalogue.mano.common.monitoring.Alarm;
 import org.openbaton.catalogue.mano.common.monitoring.AlarmEndpoint;
@@ -24,8 +26,6 @@ import org.openbaton.monitoring.interfaces.MonitoringPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 
 public class PrometheusMonitoringAgent extends MonitoringPlugin {
@@ -34,7 +34,6 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
 	private int requestFrequency;
 	private String prometheusPluginIp;
 	private PrometheusSender prometheusSender;
-//	private ZabbixApiManager zabbixApiManager;
 	private String notificationReceiverServerContext;
 	private int notificationReceiverServerPort;
 	private Gson mapper;
@@ -53,6 +52,22 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
 	  //Server properties
 	private HttpServer server;	
 	//private MyHandler myHandler;
+
+	public PrometheusMonitoringAgent(){
+		loadProperties();
+		String prometheusHost = properties.getProperty("prometheus-host", "192.168.56.3");
+		String prometheusPort = properties.getProperty("prometheus-port", "9090");
+		String username = properties.getProperty("user-zbx");
+		String password = properties.getProperty("password-zbx");
+		prometheusPluginIp = properties.getProperty("prometheus-plugin-ip");
+		String prometheusEndpoint = properties.getProperty("zabbix-endpoint", "/api/v1/query?query=");
+		prometheusSender = new PrometheusSender(prometheusHost,
+				prometheusPort,
+				prometheusEndpoint,
+				false,
+				username,
+				password);
+	}
 	
 	@Override
 	public String subscribeForFault(AlarmEndpoint filter) throws MonitoringException {
@@ -95,8 +110,32 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
 	@Override
 	public List<Item> queryPMJob(List<String> hostnames, List<String> metrics, String period)
 			throws MonitoringException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Item> result = new ArrayList<>();
+		for(String metric : metrics){
+			try {
+				JsonObject jsonObject = prometheusSender.callGet(metric);
+				log.info(String.valueOf(jsonObject));
+				JsonArray ms = jsonObject.get("data").getAsJsonObject().get("result").getAsJsonArray();
+
+				for(JsonElement m : ms){
+					String host = m.getAsJsonObject().get("metric").getAsJsonObject().get("instance").getAsString();
+					if(hostnames.contains(host)){
+						Item instance = new Item();
+						instance.setMetric(metric);
+						instance.setHostname(host);
+						String value = m.getAsJsonObject().get("value").getAsJsonArray().get(1)
+								.getAsString();
+						instance.setValue(value);
+
+						result.add(instance);
+					}
+				}
+			} catch (UnirestException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
 	}
 
 	@Override
