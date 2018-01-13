@@ -34,3 +34,7 @@ services:
      - 9090
    volumes:
      - "/home/radoslav/projects/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+     - '9100:9100'
