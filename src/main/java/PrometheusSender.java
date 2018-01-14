@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+
+import java.text.SimpleDateFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import org.openbaton.exceptions.MonitoringException;
@@ -55,9 +57,46 @@ public class PrometheusSender {
   }
 
   // Make a GET request to the Prometheus HTTP API, returning JsonObject
-  public JsonObject callGet(String query) throws MonitoringException, UnirestException {
+  public JsonObject callGetInstantQuery(String query) throws MonitoringException, UnirestException {
     //if(!isAvailable) throw new MonitoringException("Prometheus Server is not reachable");
     HttpResponse<String> jsonResponse = Unirest.get(prometheusURL + query).asString();
+    JsonElement jsonResponseEl = null;
+
+    try {
+      jsonResponseEl = mapper.fromJson(jsonResponse.getBody(), JsonElement.class);
+    } catch (Exception e) {
+      log.error("Could not map the Prometheus server's response to JsonElement", e);
+      throw new MonitoringException(
+          "Could not map the Prometheus server's response to JsonElement", e);
+    }
+
+    if (jsonResponseEl == null)
+      throw new MonitoringException("The json received from Prometheus Server is null");
+
+    if (!jsonResponseEl.isJsonObject()) {
+      throw new MonitoringException("The json received from Prometheus Server is not a JsonObject");
+    } else {
+      JsonObject jsonResponseObj = jsonResponseEl.getAsJsonObject();
+      return jsonResponseObj;
+    }
+  }
+  
+  public JsonObject callGetRangeQuery(String query, String period, int step) 
+		  throws MonitoringException, UnirestException {
+    //if(!isAvailable) throw new MonitoringException("Prometheus Server is not reachable");
+    String endTime =
+        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            .format(new java.util.Date(((System.currentTimeMillis() / 1000) - 3600) * 1000)); // convert to UTC
+    String startTime =
+        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            .format(new java.util.Date((((System.currentTimeMillis() / 1000) - 3600) - Long.parseLong(period)) * 1000));
+    String endTimeFormatted =
+        endTime.substring(0, 10) + 'T' + endTime.substring(11, endTime.length()) + 'Z';
+    String startTimeFormatted =
+        startTime.substring(0, 10) + 'T' + startTime.substring(11, startTime.length()) + 'Z';
+	String url = prometheusURL + query + "&start=" + startTimeFormatted 
+			+ "&end=" + endTimeFormatted + "&step=" + step + 's';
+    HttpResponse<String> jsonResponse = Unirest.get(url).asString();
     JsonElement jsonResponseEl = null;
 
     try {

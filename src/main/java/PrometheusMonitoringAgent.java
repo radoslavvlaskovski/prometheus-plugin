@@ -54,9 +54,9 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
     String username = properties.getProperty("user-zbx");
     String password = properties.getProperty("password-zbx");
     prometheusPluginIp = properties.getProperty("prometheus-plugin-ip");
-    String prometheusEndpoint =
-        properties.getProperty("prometheus-endpoint", "/api/v1/query?query=");
-    //		String prometheusEndpoint = properties.getProperty("prometheus-endpoint", "/api/v1/query_range?query=");
+//    String prometheusEndpoint =
+//        properties.getProperty("prometheus-endpoint", "/api/v1/query?query=");
+    String prometheusEndpoint = properties.getProperty("prometheus-endpoint", "/api/v1/query_range?query=");
     prometheusSender =
         new PrometheusSender(
             prometheusHost, prometheusPort, prometheusEndpoint, false, username, password);
@@ -108,27 +108,11 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
   @Override
   public List<Item> queryPMJob(List<String> hostnames, List<String> metrics, String period)
       throws MonitoringException {
-    int step = 1;
-    String endTime =
-        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            .format(new java.util.Date(System.currentTimeMillis()));
-    String startTime =
-        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            .format(
-                new java.util.Date(
-                    (System.currentTimeMillis() / 1000 - Long.parseLong(period)) * 1000));
-    String endTimeFormatted =
-        endTime.substring(0, 10) + 'T' + endTime.substring(11, endTime.length()) + 'Z';
-    String startTimeFormatted =
-        startTime.substring(0, 10) + 'T' + startTime.substring(11, startTime.length()) + 'Z';
-    
-    System.out.println("End time: " + endTimeFormatted);
-    System.out.println("Start time: " + startTimeFormatted);
-    
     List<Item> result = new ArrayList<>();
     for (String metric : metrics) {
       try {
-        JsonObject jsonObject = prometheusSender.callGet(metric);
+//        JsonObject jsonObject = prometheusSender.callGetInstantQuery(metric);
+        JsonObject jsonObject = prometheusSender.callGetRangeQuery(metric, period, 1);
         log.info(String.valueOf(jsonObject));
         JsonArray ms = jsonObject.get("data").getAsJsonObject().get("result").getAsJsonArray();
 
@@ -152,6 +136,42 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
 
     return result;
   }
+  
+  public List<Item> rangeQueryJob(List<String> hostnames, List<String> metrics, String period)
+	      throws MonitoringException {
+	    List<Item> result = new ArrayList<>();
+	    for (String metric : metrics) {
+	      try {
+	        JsonObject jsonObject = prometheusSender.callGetRangeQuery(metric, period, 1);
+	        log.info(String.valueOf(jsonObject));
+	        JsonArray ms = jsonObject.get("data").getAsJsonObject().get("result").getAsJsonArray();
+
+	        for (JsonElement m : ms) {
+	          String host =
+	              m.getAsJsonObject().get("metric").getAsJsonObject().get("instance").getAsString();
+	          if (hostnames.contains(host)) {
+	            Item instance = new Item();
+	            instance.setMetric(metric);
+	            instance.setHostname(host);
+	            String avgValue = null;
+	            double absValue = 0;
+	            JsonArray values = m.getAsJsonObject().get("values").getAsJsonArray();
+	            for(JsonElement value : values) {
+	            	absValue += value.getAsJsonArray().get(1).getAsDouble();
+	            }
+	            avgValue = Double.toString((absValue / values.size()));
+	            instance.setValue(avgValue);
+
+	            result.add(instance);
+	          }
+	        }
+	      } catch (UnirestException e) {
+	        e.printStackTrace();
+	      }
+	    }
+
+	    return result;
+	  }
 
   @Override
   public void subscribe() {

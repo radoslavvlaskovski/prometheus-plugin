@@ -31,10 +31,10 @@ public class Starter {
     List<String> hosts = new ArrayList<>();
     hosts.add("localhost:9090");
     List<String> metrics = new ArrayList<>();
-    //        metrics.add("up");
-    //        metrics.add("http_requests_total");
+//    metrics.add("up");
+    metrics.add("http_requests_total");
     //        metrics.add("http_request_size_bytes_sum");
-    metrics.add("go_gc_duration_seconds");
-    log.info(prometheusMonitoringAgent.queryPMJob(hosts, metrics, "120").toString());
+//    metrics.add("go_gc_duration_seconds");
+    log.info(prometheusMonitoringAgent.rangeQueryJob(hosts, metrics, "30").toString());
   }
 }
