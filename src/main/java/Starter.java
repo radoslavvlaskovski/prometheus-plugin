@@ -29,10 +29,11 @@ public class Starter {
 
     PrometheusMonitoringAgent prometheusMonitoringAgent = new PrometheusMonitoringAgent();
     List<String> hosts = new ArrayList<>();
-    hosts.add("localhost:9090");
+    hosts.add("openbatoncompose_rabbitmq_broker_1");
+    hosts.add("openbatoncompose_nfvo_1");
     List<String> metrics = new ArrayList<>();
 //    metrics.add("up");
-    metrics.add("http_requests_total");
+    metrics.add("container_cpu_load_average_10s");
     //        metrics.add("http_request_size_bytes_sum");
 //    metrics.add("go_gc_duration_seconds");
     log.info(prometheusMonitoringAgent.rangeQueryJob(hosts, metrics, "30").toString());

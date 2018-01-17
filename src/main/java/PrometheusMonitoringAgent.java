@@ -148,7 +148,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
 
 	        for (JsonElement m : ms) {
 	          String host =
-	              m.getAsJsonObject().get("metric").getAsJsonObject().get("instance").getAsString();
+	              m.getAsJsonObject().get("metric").getAsJsonObject().get("name").getAsString();
 	          if (hostnames.contains(host)) {
 	            Item instance = new Item();
 	            instance.setMetric(metric);
