@@ -1,0 +1,10 @@
+type        = "docker"
+endpoint    = "docker"
+allocate    = true
+workers     = 1
+description = "The Vnfm description"
+username    = "openbaton-manager-user"
+password    = "openbaton"
+logLevel    = "INFO"
+brokerIp    = "rabbitmq_broker"
+brokerPort  = 5672
