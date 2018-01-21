@@ -50,12 +50,12 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
   public PrometheusMonitoringAgent() {
       super();
       loadProperties();
-      String prometheusHost = properties.getProperty("prometheus-host", "localhost");
+      String prometheusHost = properties.getProperty("prometheus-host", "192.168.56.101");
       String prometheusPort = properties.getProperty("prometheus-port", "9090");
 
       prometheusPluginIp = properties.getProperty("prometheus-plugin-ip", "");
 
-      String prometheusEndpoint = properties.getProperty("prometheus-endpoint", "/api/v1/query_range?query=");
+      String prometheusEndpoint = properties.getProperty("prometheus-endpoint", "/api/v1/query?query=");
       prometheusSender =
         new PrometheusSender(
             prometheusHost, prometheusPort, prometheusEndpoint, false);
@@ -110,8 +110,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
     List<Item> result = new ArrayList<>();
     for (String metric : metrics) {
       try {
-//        JsonObject jsonObject = prometheusSender.callGetInstantQuery(metric);
-        JsonObject jsonObject = prometheusSender.callGetRangeQuery(metric, period, 1);
+        JsonObject jsonObject = prometheusSender.callGetInstantQuery(metric);
         log.info(String.valueOf(jsonObject));
         JsonArray ms = jsonObject.get("data").getAsJsonObject().get("result").getAsJsonArray();
 
@@ -137,40 +136,40 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
   }
   
   public List<Item> rangeQueryJob(List<String> hostnames, List<String> metrics, String period)
-	      throws MonitoringException {
-	    List<Item> result = new ArrayList<>();
+ 	      throws MonitoringException {
+ 	    List<Item> result = new ArrayList<>();
 	    for (String metric : metrics) {
-	      try {
-	        JsonObject jsonObject = prometheusSender.callGetRangeQuery(metric, period, 1);
-	        log.info(String.valueOf(jsonObject));
-	        JsonArray ms = jsonObject.get("data").getAsJsonObject().get("result").getAsJsonArray();
-
-	        for (JsonElement m : ms) {
-	          String host =
-	              m.getAsJsonObject().get("metric").getAsJsonObject().get("name").getAsString();
-	          if (hostnames.contains(host)) {
-	            Item instance = new Item();
-	            instance.setMetric(metric);
-	            instance.setHostname(host);
-	            String avgValue = null;
-	            double absValue = 0;
-	            JsonArray values = m.getAsJsonObject().get("values").getAsJsonArray();
-	            for(JsonElement value : values) {
-	            	absValue += value.getAsJsonArray().get(1).getAsDouble();
-	            }
-	            avgValue = Double.toString((absValue / values.size()));
-	            instance.setValue(avgValue);
-
-	            result.add(instance);
-	          }
-	        }
-	      } catch (UnirestException e) {
-	        e.printStackTrace();
-	      }
-	    }
-
-	    return result;
-	  }
+ 	      try {
+ 	        JsonObject jsonObject = prometheusSender.callGetRangeQuery(metric, period, 1);
+ 	        log.info(String.valueOf(jsonObject));
+ 	        JsonArray ms = jsonObject.get("data").getAsJsonObject().get("result").getAsJsonArray();
+ 
+ 	        for (JsonElement m : ms) {
+ 	          String host =
+ 	              m.getAsJsonObject().get("metric").getAsJsonObject().get("instance").getAsString();
+ 	          if (hostnames.contains(host)) {
+ 	            Item instance = new Item();
+ 	            instance.setMetric(metric);
+ 	            instance.setHostname(host);
+ 	            String avgValue = null;
+ 	            double absValue = 0;
+ 	            JsonArray values = m.getAsJsonObject().get("values").getAsJsonArray();
+ 	            for(JsonElement value : values) {
+ 	            	absValue += value.getAsJsonArray().get(1).getAsDouble();
+ 	            }
+ 	            avgValue = Double.toString((absValue / values.size()));
+ 	            instance.setValue(avgValue);
+ 
+ 	            result.add(instance);
+ 	          }
+ 	        }
+ 	      } catch (UnirestException e) {
+ 	        e.printStackTrace();
+ 	      }
+ 	    }
+ 
+ 	    return result;
+ 	  }
 
   @Override
   public void subscribe() {
