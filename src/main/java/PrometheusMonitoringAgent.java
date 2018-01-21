@@ -48,18 +48,17 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
   //private MyHandler myHandler;
 
   public PrometheusMonitoringAgent() {
-    loadProperties();
-    String prometheusHost = properties.getProperty("prometheus-host", "192.168.56.101");
-    String prometheusPort = properties.getProperty("prometheus-port", "9090");
-    String username = properties.getProperty("user-zbx");
-    String password = properties.getProperty("password-zbx");
-    prometheusPluginIp = properties.getProperty("prometheus-plugin-ip");
-//    String prometheusEndpoint =
-//        properties.getProperty("prometheus-endpoint", "/api/v1/query?query=");
-    String prometheusEndpoint = properties.getProperty("prometheus-endpoint", "/api/v1/query_range?query=");
-    prometheusSender =
+      super();
+      loadProperties();
+      String prometheusHost = properties.getProperty("prometheus-host", "localhost");
+      String prometheusPort = properties.getProperty("prometheus-port", "9090");
+
+      prometheusPluginIp = properties.getProperty("prometheus-plugin-ip", "");
+
+      String prometheusEndpoint = properties.getProperty("prometheus-endpoint", "/api/v1/query_range?query=");
+      prometheusSender =
         new PrometheusSender(
-            prometheusHost, prometheusPort, prometheusEndpoint, false, username, password);
+            prometheusHost, prometheusPort, prometheusEndpoint, false);
   }
 
   @Override

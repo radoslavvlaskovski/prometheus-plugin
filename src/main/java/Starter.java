@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 import org.openbaton.exceptions.MonitoringException;
+import org.openbaton.plugin.PluginStarter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +15,7 @@ public class Starter {
       throws NoSuchMethodException, InterruptedException, IOException, InstantiationException,
           TimeoutException, IllegalAccessException, InvocationTargetException, MonitoringException {
     Logger log = LoggerFactory.getLogger(Starter.class);
-    /*if (args.length == 4) {
+    if (args.length == 4) {
         PluginStarter.registerPlugin(
                 PrometheusMonitoringAgent.class,
                 args[0],
@@ -23,10 +24,11 @@ public class Starter {
                 //          Integer.parseInt(args[3]));
                 1);
     } else {
-        PluginStarter.registerPlugin(PrometheusMonitoringAgent.class, "prometheus", "localhost",
+        PluginStarter.registerPlugin(PrometheusMonitoringAgent.class, "prometheus", "192.168.56.3",
                 5672, 1);
-    }*/
+    }
 
+    /*
     PrometheusMonitoringAgent prometheusMonitoringAgent = new PrometheusMonitoringAgent();
     List<String> hosts = new ArrayList<>();
     hosts.add("openbatoncompose_rabbitmq_broker_1");
@@ -36,6 +38,6 @@ public class Starter {
     metrics.add("container_cpu_load_average_10s");
     //        metrics.add("http_request_size_bytes_sum");
 //    metrics.add("go_gc_duration_seconds");
-    log.info(prometheusMonitoringAgent.rangeQueryJob(hosts, metrics, "30").toString());
+    log.info(prometheusMonitoringAgent.rangeQueryJob(hosts, metrics, "30").toString());*/
   }
 }

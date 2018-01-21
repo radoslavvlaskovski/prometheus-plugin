@@ -18,13 +18,9 @@ public class PrometheusSender {
 
   private Logger log = LoggerFactory.getLogger(this.getClass());
   private Gson mapper = new GsonBuilder().setPrettyPrinting().create();
-  private String TOKEN;
   private String prometheusHost;
   private String prometheusPort;
   private String prometheusURL;
-  private String username;
-  private String password;
-  protected boolean isAvailable;
   private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
   /*
@@ -40,12 +36,8 @@ public class PrometheusSender {
       String prometheusHost,
       String prometheusPort,
       String prometheusEndpoint,
-      Boolean prometheusSsl,
-      String username,
-      String password) {
+      Boolean prometheusSsl) {
     this.prometheusHost = prometheusHost;
-    this.username = username;
-    this.password = password;
     String protocol = prometheusSsl ? "https://" : "http://";
 
     if (prometheusPort == null || prometheusPort.equals("")) {
