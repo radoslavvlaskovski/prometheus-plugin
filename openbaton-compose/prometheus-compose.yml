@@ -21,10 +21,6 @@ services:
     depends_on:
       - cadvisor
     restart: always
-    deploy:
-      placement:
-        constraints:
-          - node.hostname == prometheus
   cadvisor:
     image: google/cadvisor:latest
     volumes:
@@ -34,7 +30,5 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
     ports:
-      - 8081:8080
+      - 8080:8080
     restart: always
-    deploy:
-      mode: global
