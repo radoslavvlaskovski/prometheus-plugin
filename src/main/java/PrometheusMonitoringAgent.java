@@ -107,6 +107,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
   @Override
   public List<Item> queryPMJob(List<String> hostnames, List<String> metrics, String period)
       throws MonitoringException {
+      log.debug(String.valueOf(hostnames));
     List<Item> result = new ArrayList<>();
     for (String metric : metrics) {
       try {

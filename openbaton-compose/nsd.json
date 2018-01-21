@@ -9,6 +9,32 @@
     "name": "server",
     "vendor": "TUB",
     "version": "0.2",
+    "auto_scale_policy":[
+      {
+        "name":"scale-out",
+        "threshold":100,
+        "comparisonOperator":">=",
+        "period":30,
+        "cooldown":60,
+        "mode":"REACTIVE",
+        "type":"WEIGHTED",
+        "alarms": [
+          {
+            "metric":"container_cpu_load_average_10s",
+            "statistic":"avg",
+            "comparisonOperator":">",
+            "threshold":0.70,
+            "weight":1
+          }
+        ],
+        "actions": [
+          {
+            "type":"SCALE_OUT",
+            "value":"1"
+          }
+        ]
+      }
+    ],
     "lifecycle_event": [
 
     ],
@@ -39,32 +65,6 @@
     "name": "client",
     "vendor": "TUB",
     "version": "0.2",
-    "auto_scale_policy":[
-      {
-        "name":"scale-out",
-        "threshold":100,
-        "comparisonOperator":">=",
-        "period":30,
-        "cooldown":60,
-        "mode":"REACTIVE",
-        "type":"WEIGHTED",
-        "alarms": [
-          {
-            "metric":"up",
-            "statistic":"avg",
-            "comparisonOperator":">",
-            "threshold":0.70,
-            "weight":1
-          }
-        ],
-        "actions": [
-          {
-            "type":"SCALE_OUT",
-            "value":"1"
-          }
-        ]
-      }
-    ],
     "lifecycle_event": [
 
     ],
