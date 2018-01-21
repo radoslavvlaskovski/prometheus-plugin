@@ -1,8 +1,5 @@
 version: '3'
 
-volumes:
-  prometheus_data: {}
-
 services:
   nfvo:
     image: openbaton/nfvo:5.1.3
@@ -65,54 +62,3 @@ services:
       - "15672:15672"
     volumes:
       - ./dbdata_rabbit:/var/lib/rabbitmq
-  prometheus:
-    image: prom/prometheus:v2.0.0
-    volumes:
-      - ./prometheus/:/etc/prometheus/
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    ports:
-      - 9090:9090
-    links:
-      - cadvisor:cadvisor
-    depends_on:
-      - cadvisor
-    restart: always
-    deploy:
-      placement:
-        constraints:
-          - node.hostname == prometheus
-
-  node-exporter:
-    image: prom/node-exporter:v0.15.2
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command: 
-      - '--path.procfs=/host/proc' 
-      - '--path.sysfs=/host/sys'
-      - --collector.filesystem.ignored-mount-points
-      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-    ports:
-      - 9100:9100
-    restart: always
-    deploy:
-      mode: global
-  cadvisor:
-    image: google/cadvisor:latest
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    ports:
-      - 8081:8080
-    restart: always
-    deploy:
-      mode: global
