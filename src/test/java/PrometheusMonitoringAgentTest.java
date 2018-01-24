@@ -22,7 +22,7 @@ public class PrometheusMonitoringAgentTest {
 		hosts = new ArrayList<>();
 		hosts.add("localhost:9090");
 		metrics = new ArrayList<>();
-		metrics.add("http_requests_total");
+		metrics.add("container_fs_io_time_seconds_total");
 	}
 	
 	@Test

@@ -14,8 +14,8 @@
         "name":"scale-out",
         "threshold":100,
         "comparisonOperator":">=",
-        "period":30,
-        "cooldown":60,
+        "period":10,
+        "cooldown":15,
         "mode":"REACTIVE",
         "type":"WEIGHTED",
         "alarms": [
@@ -23,7 +23,7 @@
             "metric":"container_cpu_load_average_10s",
             "statistic":"avg",
             "comparisonOperator":">",
-            "threshold":0.70,
+            "threshold":0,
             "weight":1
           }
         ],
