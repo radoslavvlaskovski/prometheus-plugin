@@ -8,7 +8,7 @@ services:
       - nfvo_database
     restart: always
     environment:
-      - NFVO_RABBIT_BROKERIP=192.168.56.3 # for use in userdata.sh in vnfm-generic
+      - NFVO_RABBIT_BROKERIP=rabbitmq_broker # for use in userdata.sh in vnfm-generic
       - NFVO_MONITORING_IP=${MONITORING_IP}
       - NFVO_PLUGIN_INSTALLATION-DIR=plugins
       - SPRING_RABBITMQ_HOST=rabbitmq_broker

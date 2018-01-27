@@ -3,5 +3,5 @@ workers     = 5
 username    = "openbaton-manager-user"
 password    = "openbaton"
 logLevel    = "DEBUG"
-brokerIp    = "192.168.56.3"
+brokerIp    = "rabbitmq_broker"
 brokerPort  = 5672
