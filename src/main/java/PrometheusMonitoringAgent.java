@@ -50,7 +50,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
   public PrometheusMonitoringAgent() {
       super();
       loadProperties();
-      String prometheusHost = properties.getProperty("prometheus-host", "192.168.56.101");
+      String prometheusHost = properties.getProperty("prometheus-host", "192.168.56.3");
       String prometheusPort = properties.getProperty("prometheus-port", "9090");
 
       prometheusPluginIp = properties.getProperty("prometheus-plugin-ip", "");
@@ -117,7 +117,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
 
         for (JsonElement m : ms) {
           String host =
-              m.getAsJsonObject().get("metric").getAsJsonObject().get("instance").getAsString();
+              m.getAsJsonObject().get("metric").getAsJsonObject().get("name").getAsString();
           if (hostnames.contains(host)) {
             Item instance = new Item();
             instance.setMetric(metric);
@@ -147,7 +147,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
  
  	        for (JsonElement m : ms) {
  	          String host =
- 	              m.getAsJsonObject().get("metric").getAsJsonObject().get("instance").getAsString();
+ 	              m.getAsJsonObject().get("metric").getAsJsonObject().get("name").getAsString();
  	          if (hostnames.contains(host)) {
  	            Item instance = new Item();
  	            instance.setMetric(metric);
