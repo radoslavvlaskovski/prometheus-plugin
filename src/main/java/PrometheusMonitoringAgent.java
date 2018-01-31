@@ -2,6 +2,10 @@
 import com.google.gson.*;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sun.net.httpserver.HttpServer;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,30 +28,20 @@ import org.slf4j.LoggerFactory;
 
 public class PrometheusMonitoringAgent extends MonitoringPlugin {
 
-  private int historyLength;
-  private int requestFrequency;
+
   private String prometheusPluginIp;
   private PrometheusSender prometheusSender;
+
   private String notificationReceiverServerContext;
   private int notificationReceiverServerPort;
-  private Gson mapper;
-  private Random random = new Random();
+
   private Logger log = LoggerFactory.getLogger(this.getClass());
-  private List<AlarmEndpoint> subscriptions;
-  //private Map<String, PmJob> pmJobs;
-  //private Map<String, Threshold> thresholds;
-  private Map<String, List<Alarm>> datacenterAlarms;
-  private String type;
-  private Map<String, List<String>> triggerIdHostnames;
-  private Map<String, String> triggerIdActionIdMap;
-  //private LimitedQueue<State> history;
-  private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
   //Server properties
   private HttpServer server;
-  //private MyHandler myHandler;
+  private Handler myHandler;
 
-  public PrometheusMonitoringAgent() {
+  public PrometheusMonitoringAgent() throws RemoteException {
       super();
       loadProperties();
       String prometheusHost = properties.getProperty("prometheus-host", "192.168.56.3");
@@ -59,6 +53,32 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
       prometheusSender =
         new PrometheusSender(
             prometheusHost, prometheusPort, prometheusEndpoint, false);
+
+      // Launch server for receiving http notifications from prometheus
+      String nrsp = properties.getProperty("notification-receiver-server-port", "8010");
+      notificationReceiverServerPort = Integer.parseInt(nrsp);
+
+      notificationReceiverServerContext =
+              properties.getProperty(
+                      "notification-receiver-server-context", "/notifications");
+      try {
+          launchServer(notificationReceiverServerPort, notificationReceiverServerContext);
+      } catch (IOException e) {
+          throw new RemoteException(e.getMessage(), e);
+      }
+  }
+
+  private void launchServer(int port, String context) throws IOException {
+      server = HttpServer.create(new InetSocketAddress(port), 1);
+      myHandler = new Handler();
+      server.createContext(context, myHandler);
+      log.debug(
+              "Notification receiver server running on url: "
+                      + server.getAddress()
+                      + " port:"
+                      + server.getAddress().getPort());
+      server.setExecutor(null);
+      server.start();
   }
 
   @Override
@@ -87,24 +107,6 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
   }
 
   @Override
-  public String createPMJob(
-      ObjectSelection resourceSelector,
-      List<String> performanceMetric,
-      List<String> performanceMetricGroup,
-      Integer collectionPeriod,
-      Integer reportingPeriod)
-      throws MonitoringException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public List<String> deletePMJob(List<String> itemIdsToDelete) throws MonitoringException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
   public List<Item> queryPMJob(List<String> hostnames, List<String> metrics, String period)
       throws MonitoringException {
       log.debug(String.valueOf(hostnames));
@@ -123,6 +125,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
             instance.setMetric(metric);
             instance.setHostname(host);
             String value = m.getAsJsonObject().get("value").getAsJsonArray().get(1).getAsString();
+            instance.setLastValue(value);
             instance.setValue(value);
 
             result.add(instance);
@@ -191,8 +194,11 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
       ThresholdType thresholdType,
       ThresholdDetails thresholdDetails)
       throws MonitoringException {
-    // TODO Auto-generated method stub
-    return null;
+
+      /*
+      TODO: Configure to create an alarm for Prometheus
+       */
+      return null;
   }
 
   @Override
@@ -206,4 +212,23 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
     // TODO Auto-generated method stub
 
   }
+
+
+    @Override
+    public String createPMJob(
+            ObjectSelection objectSelection,
+            List<String> performanceMetrics,
+            List<String> performanceMetricGroup,
+            Integer collectionPeriod,
+            Integer reportingPeriod)
+            throws MonitoringException {
+        // Zabbix specific method
+        return null;
+    }
+
+    @Override
+    public List<String> deletePMJob(List<String> itemIdsToDelete) throws MonitoringException {
+        // Zabbix specific
+        return null;
+    }
 }

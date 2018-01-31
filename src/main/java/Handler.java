@@ -43,9 +43,9 @@ class Handler implements HttpHandler {
     }
 
     private void checkRequest(String message) throws BadFormatException {
-        log.debug("\n\n");
-        log.debug("Received: " + message);
-        Notification monitoringNotification;
+        log.info("\n\n");
+        log.info("Received: " + message);
+        /*Notification monitoringNotification;
         try {
             Gson mapper = new GsonBuilder().setPrettyPrinting().create();
             monitoringNotification = mapper.fromJson(message, Notification.class);
@@ -55,7 +55,7 @@ class Handler implements HttpHandler {
         }
         log.debug("\n");
         log.debug("ZabbixNotification: " + monitoringNotification);
-        handleNotification(monitoringNotification);
+        handleNotification(monitoringNotification);*/
     }
 
     private String read(InputStream is) throws IOException {
