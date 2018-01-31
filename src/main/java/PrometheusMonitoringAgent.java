@@ -73,7 +73,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
       myHandler = new Handler();
       server.createContext(context, myHandler);
       log.debug(
-              "Notification receiver server running on url: "
+              "PrometheusNotification receiver server running on url: "
                       + server.getAddress()
                       + " port:"
                       + server.getAddress().getPort());
