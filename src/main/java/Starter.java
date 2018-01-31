@@ -24,7 +24,7 @@ public class Starter {
                 //          Integer.parseInt(args[3]));
                 1);
     } else {
-        PluginStarter.registerPlugin(PrometheusMonitoringAgent.class, "zabbix", "192.168.56.3",
+        PluginStarter.registerPlugin(PrometheusMonitoringAgent.class, "zabbix", "192.168.56.101",
                 5672, 1);
     }
 
