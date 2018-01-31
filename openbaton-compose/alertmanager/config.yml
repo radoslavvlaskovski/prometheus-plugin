@@ -1,0 +1,11 @@
+receivers:
+  - name: "prometheus-plugin"
+    webhook_configs:
+      - url: 'http://192.168.56.1:8010/notifications'
+        send_resolved: true
+route:
+  receiver: "prometheus-plugin"
+  group_by: ['alertname']
+  group_wait:      30s
+  group_interval:  1m
+  repeat_interval: 2m
