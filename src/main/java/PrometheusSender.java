@@ -7,6 +7,9 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -108,5 +111,37 @@ public class PrometheusSender {
       JsonObject jsonResponseObj = jsonResponseEl.getAsJsonObject();
       return jsonResponseObj;
     }
+  }
+  
+  public void addJob(String pathToFile, String job, int scrapeInterval,
+		  String names, String type, int port, Boolean dnsSdConfigs) {
+	  
+	  PrintWriter pw = null;
+	  
+	  try {
+		  pw = new PrintWriter(new FileWriter(pathToFile, true));
+		  StringBuilder sb = new StringBuilder("\n\n  - job_name: '" + job + "'\n\n");
+		  sb.append("    # Override the global default and scrape targets from this job every " + 
+		  scrapeInterval + " seconds.\n");
+		  sb.append("    scrape_interval: " + scrapeInterval + "s\n\n");
+		  if(!dnsSdConfigs) {
+			  sb.append("    static_configs:\n");
+			  sb.append("      - targets: ['" + job + ':' + port + "']\n");
+			  pw.write(sb.toString());
+		  } else {
+			  sb.append("    dns_sd_configs:\n");
+			  sb.append("    - names:\n");
+			  sb.append("      - 'tasks." + job + "'\n");
+			  sb.append("      type: 'A'\n");
+			  sb.append("      port: " + port + "\n\n");
+			  sb.append("    static_configs:\n");
+			  sb.append("      - targets: ['" + job + ':' + port + "']\n");
+			  pw.write(sb.toString());
+		  }
+	  } catch(IOException e) {
+		  e.printStackTrace();
+	  } finally {
+		  pw.close();
+	  }
   }
 }
