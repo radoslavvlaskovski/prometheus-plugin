@@ -105,40 +105,6 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
     // TODO Auto-generated method stub
     return null;
   }
-
-  // Do an instant query (without period)
-//  @Override
-//  public List<Item> queryPMJob(List<String> hostnames, List<String> metrics, String period)
-//      throws MonitoringException {
-//      log.debug(String.valueOf(hostnames));
-//    List<Item> result = new ArrayList<>();
-//    for (String metric : metrics) {
-//      try {
-//        JsonObject jsonObject = prometheusSender.callGetInstantQuery(metric);
-//        log.info(String.valueOf(jsonObject));
-//        JsonArray ms = jsonObject.get("data").getAsJsonObject().get("result").getAsJsonArray();
-//
-//        for (JsonElement m : ms) {
-//          String host =
-//              m.getAsJsonObject().get("metric").getAsJsonObject().get("name").getAsString();
-//          if (hostnames.contains(host)) {
-//            Item instance = new Item();
-//            instance.setMetric(metric);
-//            instance.setHostname(host);
-//            String value = m.getAsJsonObject().get("value").getAsJsonArray().get(1).getAsString();
-//            instance.setLastValue(value);
-//            instance.setValue(value);
-//
-//            result.add(instance);
-//          }
-//        }
-//      } catch (UnirestException e) {
-//        e.printStackTrace();
-//      }
-//    }
-//
-//    return result;
-//  }
   
   @Override
   public List<Item> queryPMJob(List<String> hostnames, List<String> metrics, String period)
