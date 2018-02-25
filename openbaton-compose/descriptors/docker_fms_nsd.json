@@ -20,6 +20,21 @@
       "name": "new-network"
     }],
     "vdu": [{
+
+      "fault_management_policy":[
+        {
+          "name": "web server not available",
+          "isVNFAlarm": true,
+          "criteria": [
+            {
+              "parameter_ref": "net.tcp.listen[80]",
+              "function": "last()",
+              "vnfc_selector": "at_least_one",
+              "comparison_operator": "=",
+              "threshold": "0"
+            }
+          ]
+        }],
       "vm_image": [
         "openbaton/iperfserver:latest"
       ],
@@ -50,23 +65,6 @@
       "name": "new-network"
     }],
     "vdu": [{
-      "fault_management_policy":[
-        {
-          "name":"web server not available",
-          "isVNFAlarm": true,
-          "criteria":[
-            {
-              "parameter_ref":"net.tcp.listen[80]",
-              "function":"last()",
-              "vnfc_selector":"at_least_one",
-              "comparison_operator":"=",
-              "threshold":"0"
-            }
-          ],
-          "period":5,
-          "severity":"CRITICAL"
-        }
-      ],
       "vm_image": [
         "openbaton/iperfclient:latest"
       ],
