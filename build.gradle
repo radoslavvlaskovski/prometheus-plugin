@@ -40,7 +40,7 @@ project.ext {
     springBootVersion = '1.2.5.RELEASE'
 
     mainClass = 'Starter'
-    openbatonVersion = "5.1.0"
+    openbatonVersion = "5.2.0"
     //------------------------------------------------//
 }
 

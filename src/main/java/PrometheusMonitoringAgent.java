@@ -78,7 +78,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
                       + " port:"
                       + server.getAddress().getPort());
       server.setExecutor(null);
-      server.start();
+      //server.start();
   }
 
   @Override
@@ -115,31 +115,36 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
  	        JsonObject jsonObject = prometheusSender.callGetRangeQuery(metric, period, 1);
  	        log.info(String.valueOf(jsonObject));
  	        JsonArray ms = jsonObject.get("data").getAsJsonObject().get("result").getAsJsonArray();
- 
- 	        for (JsonElement m : ms) {
- 	          String host =
- 	              m.getAsJsonObject().get("metric").getAsJsonObject().get("name").getAsString();
- 	          if (hostnames.contains(host)) {
- 	            Item instance = new Item();
- 	            instance.setMetric(metric);
- 	            instance.setHostname(host);
- 	            String avgValue = null;
- 	            double absValue = 0;
- 	            JsonArray values = m.getAsJsonObject().get("values").getAsJsonArray();
- 	            for(JsonElement value : values) {
- 	            	absValue += value.getAsJsonArray().get(1).getAsDouble();
- 	            }
- 	            avgValue = Double.toString((absValue / values.size()));
- 	            instance.setValue(avgValue);
- 
- 	            result.add(instance);
- 	          }
- 	        }
+
+ 	        for(String searchedHost : hostnames){
+                Item instance = new Item();
+                instance.setMetric(metric);
+                instance.setHostname(searchedHost);
+                instance.setValue(null);
+                for (JsonElement m : ms) {
+                    String host =
+                            m.getAsJsonObject().get("metric").getAsJsonObject().get("name").getAsString();
+                    if (host.contains(searchedHost + "-")) {
+                        String avgValue = null;
+                        double absValue = 0;
+                        JsonArray values = m.getAsJsonObject().get("values").getAsJsonArray();
+                        for(JsonElement value : values) {
+                            absValue += value.getAsJsonArray().get(1).getAsDouble();
+                        }
+                        avgValue = Double.toString((absValue / values.size()));
+                        instance.setValue(avgValue);
+                    }
+                }
+                if(instance.getValue() != null)
+                    result.add(instance);
+
+            }
+
  	      } catch (UnirestException e) {
  	        e.printStackTrace();
  	      }
  	    }
- 
+        log.debug(String.valueOf(result));
  	    return result;
  	  }
 

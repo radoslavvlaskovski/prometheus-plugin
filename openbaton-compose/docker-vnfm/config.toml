@@ -5,6 +5,6 @@ workers     = 1
 description = "The Vnfm description"
 username    = "openbaton-manager-user"
 password    = "openbaton"
-logLevel    = "INFO"
+logLevel    = "TRACE"
 brokerIp    = "rabbitmq_broker"
 brokerPort  = 5672
