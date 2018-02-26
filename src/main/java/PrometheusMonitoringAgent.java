@@ -78,7 +78,7 @@ public class PrometheusMonitoringAgent extends MonitoringPlugin {
                       + " port:"
                       + server.getAddress().getPort());
       server.setExecutor(null);
-      //server.start();
+      server.start();
   }
 
   @Override

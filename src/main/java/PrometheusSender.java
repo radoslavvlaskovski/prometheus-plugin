@@ -113,38 +113,4 @@ public class PrometheusSender {
       return jsonResponseObj;
     }
   }
-  
-  public void addTarget(String pathToFile, String job, String ip, int port) throws Exception {
-
-      try {
-          InputStream input = new FileInputStream(new File(pathToFile));
-          Yaml yaml = new Yaml();
-          Map<String, Object> globalMap = (Map<String, Object>) yaml.load(input);
-          input.close();
-          ArrayList<Map<String, Object>> jobs = (ArrayList<Map<String, Object>>) globalMap.get("scrape_configs");
-
-          for (Map<String, Object> scrapeJob : jobs) {
-              if (scrapeJob.containsKey("job_name")){
-                  if(scrapeJob.get("job_name").equals(job)){
-                      if(scrapeJob.containsKey("static_configs")){
-                          ArrayList<Map<String, Object>> configs = (ArrayList<Map<String, Object>>) scrapeJob.get("static_configs");
-                          for(Map<String, Object> config : configs){
-                              if(config.containsKey("targets")){
-                                  ArrayList<String> targets = (ArrayList<String>) config.get("targets");
-                                  targets.add(ip + ":" + port);
-                                  FileWriter writer = new FileWriter(pathToFile);
-                                  yaml.dump(globalMap, writer);
-                                  writer.close();
-                              }
-                          }
-                      }
-                  }
-              }
-
-          }
-      }
-      catch (Exception e){
-          throw new Exception("Failed updating prometheus config");
-      }
-  }
 }

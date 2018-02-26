@@ -6,8 +6,11 @@ import com.sun.net.httpserver.HttpHandler;
 import org.openbaton.exceptions.BadFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by rados on 1/21/2018.
@@ -34,20 +37,20 @@ class Handler implements HttpHandler {
         }
     }
 
-    private void checkRequest(String message) throws BadFormatException {
+    private void checkRequest(String message) throws Exception {
         log.info("\n\n");
         log.info("Received: " + message);
-        PrometheusNotification monitoringNotification;
+        PrometheusJob prometheusJob;
         try {
             Gson mapper = new GsonBuilder().setPrettyPrinting().create();
-            monitoringNotification = mapper.fromJson(message, PrometheusNotification.class);
+            prometheusJob = mapper.fromJson(message, PrometheusJob.class);
         } catch (JsonSyntaxException e) {
             throw new BadFormatException(
                     "JsonSyntaxException: Impossible to retrieve the ZabbixNotification received");
         }
         log.debug("\n");
-        log.debug("Prometheus Notification: " + monitoringNotification);
-        handleNotification(monitoringNotification);
+        log.debug("Prometheus Notification: " + prometheusJob);
+        handleJob(prometheusJob);
     }
 
     private String read(InputStream is) throws IOException {
@@ -57,6 +60,40 @@ class Handler implements HttpHandler {
             while ((inputStr = streamReader.readLine()) != null) responseStrBuilder.append(inputStr);
         }
         return responseStrBuilder.toString();
+    }
+
+    private void handleJob(PrometheusJob prometheusJob) throws Exception {
+        String pathToFile = "prometheus.yml";
+        try {
+            InputStream input = new FileInputStream(new File(pathToFile));
+            Yaml yaml = new Yaml();
+            Map<String, Object> globalMap = (Map<String, Object>) yaml.load(input);
+            input.close();
+            ArrayList<Map<String, Object>> jobs = (ArrayList<Map<String, Object>>) globalMap.get("scrape_configs");
+
+            for (Map<String, Object> scrapeJob : jobs) {
+                if (scrapeJob.containsKey("job_name")){
+                    if(scrapeJob.get("job_name").equals(prometheusJob.getJobName())){
+                        if(scrapeJob.containsKey("static_configs")){
+                            ArrayList<Map<String, Object>> configs = (ArrayList<Map<String, Object>>) scrapeJob.get("static_configs");
+                            for(Map<String, Object> config : configs){
+                                if(config.containsKey("targets")){
+                                    ArrayList<String> targets = (ArrayList<String>) config.get("targets");
+                                    targets.add(prometheusJob.getIp() + ":" + prometheusJob.getPort());
+                                    FileWriter writer = new FileWriter(pathToFile);
+                                    yaml.dump(globalMap, writer);
+                                    writer.close();
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        catch (Exception e){
+            throw new Exception(e);
+        }
     }
 
     private void handleNotification(PrometheusNotification notification) {
