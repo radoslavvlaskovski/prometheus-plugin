@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  nfvo:
+    image: openbaton/nfvo:5.2.0
+    depends_on:
+      - rabbitmq_broker
+      - nfvo_database
+    restart: always
+    environment:
+      - NFVO_RABBIT_BROKERIP=rabbitmq_broker # for use in userdata.sh in vnfm-generic
+      - NFVO_MONITORING_IP=prometheus
+      - NFVO_PLUGIN_INSTALLATION-DIR=plugins
+      - SPRING_RABBITMQ_HOST=rabbitmq_broker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://nfvo_database:3306/openbaton
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.mariadb.jdbc.Driver
+      - SPRING_JPA_DATABASE-PLATFORM=org.hibernate.dialect.MySQLDialect
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+    ports:
+      - "8080:8080"
+  plugin-vimdriver-openstack-4j:
+    image: openbaton/plugin-vimdriver-openstack-4j:5.2.0
+    depends_on:
+      - nfvo
+    restart: always
+    environment:
+      - RABBITMQ=rabbitmq_broker
+  autoscaling-engine:
+    build: ase
+    depends_on:
+      - nfvo
+    restart: always
+    environment:
+      - ASE_RABBITMQ_BROKERIP=rabbitmq_broker
+      - ASE_SERVER_IP=autoscaling-engine
+      - NFVO_IP=nfvo
+      - PLUGIN_IP=prometheus
+  nfvo_database:
+    image: mysql/mysql-server
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_DATABASE=openbaton
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=changeme
+    volumes:
+      - ./dbdata_nfvo:/var/lib/mysql
+  rabbitmq_broker:
+    image: rabbitmq:3-management-alpine
+    hostname: openbaton-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=openbaton
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./dbdata_rabbit:/var/lib/rabbitmq

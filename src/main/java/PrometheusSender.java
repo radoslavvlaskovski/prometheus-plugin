@@ -7,15 +7,16 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import org.openbaton.exceptions.MonitoringException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
 
 public class PrometheusSender {
 
@@ -113,35 +114,37 @@ public class PrometheusSender {
     }
   }
   
-  public void addJob(String pathToFile, String job, int scrapeInterval,
-		  String names, String type, int port, Boolean dnsSdConfigs) {
-	  
-	  PrintWriter pw = null;
-	  
-	  try {
-		  pw = new PrintWriter(new FileWriter(pathToFile, true));
-		  StringBuilder sb = new StringBuilder("\n\n  - job_name: '" + job + "'\n\n");
-		  sb.append("    # Override the global default and scrape targets from this job every " + 
-		  scrapeInterval + " seconds.\n");
-		  sb.append("    scrape_interval: " + scrapeInterval + "s\n\n");
-		  if(!dnsSdConfigs) {
-			  sb.append("    static_configs:\n");
-			  sb.append("      - targets: ['" + job + ':' + port + "']\n");
-			  pw.write(sb.toString());
-		  } else {
-			  sb.append("    dns_sd_configs:\n");
-			  sb.append("    - names:\n");
-			  sb.append("      - 'tasks." + job + "'\n");
-			  sb.append("      type: 'A'\n");
-			  sb.append("      port: " + port + "\n\n");
-			  sb.append("    static_configs:\n");
-			  sb.append("      - targets: ['" + job + ':' + port + "']\n");
-			  pw.write(sb.toString());
-		  }
-	  } catch(IOException e) {
-		  e.printStackTrace();
-	  } finally {
-		  pw.close();
-	  }
+  public void addTarget(String pathToFile, String job, String ip, int port) throws Exception {
+
+      try {
+          InputStream input = new FileInputStream(new File(pathToFile));
+          Yaml yaml = new Yaml();
+          Map<String, Object> globalMap = (Map<String, Object>) yaml.load(input);
+          input.close();
+          ArrayList<Map<String, Object>> jobs = (ArrayList<Map<String, Object>>) globalMap.get("scrape_configs");
+
+          for (Map<String, Object> scrapeJob : jobs) {
+              if (scrapeJob.containsKey("job_name")){
+                  if(scrapeJob.get("job_name").equals(job)){
+                      if(scrapeJob.containsKey("static_configs")){
+                          ArrayList<Map<String, Object>> configs = (ArrayList<Map<String, Object>>) scrapeJob.get("static_configs");
+                          for(Map<String, Object> config : configs){
+                              if(config.containsKey("targets")){
+                                  ArrayList<String> targets = (ArrayList<String>) config.get("targets");
+                                  targets.add(ip + ":" + port);
+                                  FileWriter writer = new FileWriter(pathToFile);
+                                  yaml.dump(globalMap, writer);
+                                  writer.close();
+                              }
+                          }
+                      }
+                  }
+              }
+
+          }
+      }
+      catch (Exception e){
+          throw new Exception("Failed updating prometheus config");
+      }
   }
 }
