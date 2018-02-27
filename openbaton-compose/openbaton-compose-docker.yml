@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nfvo:
-    image: openbaton/nfvo:5.2.0
+    build: nfvo
     depends_on:
       - rabbitmq_broker
       - nfvo_database
