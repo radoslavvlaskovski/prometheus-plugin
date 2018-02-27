@@ -1,0 +1,116 @@
+driver-docker-go_1    | 11:04:01 [DEBU] docker-dri -> PluginImpl ▶  Networks are [ingress host bridge docker_gwbridge openbatoncompose_default none new-network]
+nfvo_1                | 2018-02-27 11:04:01.170 DEBUG 1 --- [nio-8080-exec-6] .o.n.c.c.NfvoGsonDeserializerVimInstance : Looking for class org.openbaton.catalogue.nfvo.viminstances.DockerVimInstance
+rabbitmq_broker_1     | 2018-02-27 11:04:01.212 [info] <0.1136.0> closing AMQP connection <0.1136.0> (172.19.0.7:34558 -> 172.19.0.5:5672, vhost: '/', user: 'admin')
+nfvo_1                | 2018-02-27 11:04:05.018 DEBUG 1 --- [nio-8080-exec-1] o.o.n.a.r.RestNetworkServiceRecord       : Json Body is{"keys":[],"configurations":{"server":{"configurationParameters":[],"name":"server-configuration","id":"c96c9e82-cb8f-426c-a405-5739619ad453","hbVersion":1,"shared":false,"metadata":{}}},"vduVimInstances":{"server-1":[]}}
+nfvo_1                | 2018-02-27 11:04:05.026  INFO 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : Looking for NetworkServiceDescriptor with ID: 9fdc3f04-95fb-491f-a1e8-c5f86e444c61
+nfvo_1                | 2018-02-27 11:04:05.147 DEBUG 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : Found keys: []
+nfvo_1                | 2018-02-27 11:04:05.259  INFO 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : Fetched NetworkServiceDescriptor: docker Iperf
+nfvo_1                | 2018-02-27 11:04:05.259  INFO 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : VNFD are: 
+nfvo_1                | 2018-02-27 11:04:05.259 DEBUG 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : 	server
+nfvo_1                | 2018-02-27 11:04:05.259  INFO 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : Checking if all vnfm are registered and active
+nfvo_1                | 2018-02-27 11:04:05.262 DEBUG 1 --- [nio-8080-exec-1] org.openbaton.nfvo.core.utils.NSDUtils   : docker == docker
+nfvo_1                | 2018-02-27 11:04:05.264 DEBUG 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : Checking vim instance support
+nfvo_1                | 2018-02-27 11:04:05.269  WARN 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : VNFPackage does not provide supported VIM. I will skip the check!
+nfvo_1                | 2018-02-27 11:04:05.272 DEBUG 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : Vim Instances chosen are: [vim-instance]
+nfvo_1                | 2018-02-27 11:04:05.277  WARN 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : Quota check is disabled... Please enable for comprehensive grant operation
+nfvo_1                | 2018-02-27 11:04:05.339 DEBUG 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : Persisted NSR docker Iperf. Got id: a05e32f7-e193-4374-af6a-54dee67284d7
+nfvo_1                | 2018-02-27 11:04:05.339 DEBUG 1 --- [nio-8080-exec-1] org.openbaton.nfvo.vnfm_reg.VnfmManager  : Parameter ordered set to false.Consider changing it directly into the openbaton-nfvo.properties file
+nfvo_1                | 2018-02-27 11:04:05.339 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.vnfm_reg.state.VnfStateHandler  : Processing VNFD (server) for NSD (docker Iperf)
+nfvo_1                | 2018-02-27 11:04:05.342 DEBUG 1 --- [tonAsyncTask-29] o.o.n.vnfm_reg.state.MessageGenerator    : deployment procedure for (server). Looking for vim-instance
+nfvo_1                | 2018-02-27 11:04:05.349 DEBUG 1 --- [nio-8080-exec-1] o.o.n.c.a.NetworkServiceRecordManagement : Returning NSR docker Iperf
+nfvo_1                | 2018-02-27 11:04:05.476 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.vnfm_reg.state.VnfStateHandler  : ----------Executing ACTION: INSTANTIATE
+nfvo_1                | 2018-02-27 11:04:05.481 DEBUG 1 --- [tonAsyncTask-30] o.o.n.v.impl.sender.RabbitVnfmSender     : Sending NFVMessage with action: INSTANTIATE to destination: docker
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf -> handleNfvM ▶  Received Message INSTANTIATE
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf -> (*worker). ▶  received extensions: map[monitoringIp: nsr-id:a05e32f7-e193-4374-af6a-54dee67284d7 brokerIp:rabbitmq_broker timezone:CET brokerPort:5672]
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf -> (*worker). ▶  received keys: []
+nfvo_1                | 2018-02-27 11:04:05.515 DEBUG 1 --- [eActionsReply-2] o.o.n.v.i.receiver.RabbitVnfmReceiver    : NFVO - core module received (via MB): GRANT_OPERATION
+nfvo_1                | 2018-02-27 11:04:05.515 DEBUG 1 --- [eActionsReply-2] o.o.n.v.i.receiver.RabbitVnfmReceiver    : Received ACTION: GRANT_OPERATION
+nfvo_1                | 2018-02-27 11:04:05.515 DEBUG 1 --- [tonAsyncTask-27] o.o.nfvo.vnfm_reg.state.VnfStateHandler  : Looking for bean called: grantoperationTask
+vnfm-docker-go_1      | 11:04:05 [INFO] docker-vnf ->        Rpc ▶  Executing RPC to queue: vnfm.nfvo.actions.reply
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf ->        Rpc ▶  Getting Channel for RPC
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf ->        Rpc ▶  Got Channel for RPC
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf ->        Rpc ▶  Declaring Queue for RPC
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf ->        Rpc ▶  Declared Queue for RPC
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf ->        Rpc ▶  Registering consumer for RPC
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf ->        Rpc ▶  Registered consumer for RPC
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf ->        Rpc ▶  Publishing message to queue vnfm.nfvo.actions.reply
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf ->        Rpc ▶  Published message to queue vnfm.nfvo.actions.reply
+nfvo_1                | 2018-02-27 11:04:05.592  INFO 1 --- [tonAsyncTask-27] o.o.nfvo.vnfm_reg.state.VnfStateHandler  : Executing Task grantoperationTask for vnfr server. Cyclic=false
+nfvo_1                | 2018-02-27 11:04:05.592 DEBUG 1 --- [tonAsyncTask-28] o.o.n.v.tasks.abstracts.AbstractTask     : Action is: GRANT_OPERATION
+nfvo_1                | 2018-02-27 11:04:05.592 DEBUG 1 --- [tonAsyncTask-28] o.o.n.v.tasks.abstracts.AbstractTask     : Previous status is: NULL
+nfvo_1                | 2018-02-27 11:04:05.592 DEBUG 1 --- [tonAsyncTask-28] o.o.n.v.tasks.abstracts.AbstractTask     : Changing status of VNFR: server ( null ) to NULL
+nfvo_1                | 2018-02-27 11:04:05.592  INFO 1 --- [tonAsyncTask-28] o.o.n.v.tasks.abstracts.AbstractTask     : Executing task: GrantOperation on VNFR: server
+nfvo_1                | 2018-02-27 11:04:05.593  WARN 1 --- [tonAsyncTask-28] o.o.n.v.tasks.abstracts.AbstractTask     : Checking quota is disabled, please consider to enable it
+nfvo_1                | 2018-02-27 11:04:05.593 DEBUG 1 --- [tonAsyncTask-28] o.o.n.v.tasks.abstracts.AbstractTask     : Added lifecycle event history: HistoryLifecycleEvent{event='GRANTED', description='All the resources that are contained in this VNFR were granted to be deployed in the chosen VIM(s)', executedAt='2018.02.27-11:04:05:593-GMT'} BaseEntity{id='null', version=0, projectId='null', shared=false, metadata=null}
+nfvo_1                | 2018-02-27 11:04:05.875  INFO 1 --- [tonAsyncTask-28] o.o.n.core.core.VnfPlacementManagement   : Chosen VimInstance: Optional[BaseVimInstance{name='vim-instance', location=Location{name='Berlin', latitude='52.525876', longitude='13.314400'} BaseEntity{id='d11c61eb-5d45-4752-9289-c873247d81f0', version=24, projectId='', shared=false, metadata={}}, type='docker', active=true} BaseEntity{id='41d2e909-b5c6-46fb-b75e-3a1318d98b54', version=25, projectId='2c638200-0a43-41d4-b686-6d472660ff94', shared=false, metadata={}}]
+nfvo_1                | 2018-02-27 11:04:05.876 DEBUG 1 --- [eActionsReply-2] o.o.n.v.i.receiver.RabbitVnfmReceiver    : Concluded ACTION: GRANT_OPERATION
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf ->        Rpc ▶  Received Response
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf -> (*worker). ▶  Received VNFR after GRANT_OPERATION
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf -> FillConfig ▶  server: Internal Config is &{VnfrID:3dd6feea-2bbc-451f-b827-b00314d12ec7 ContainerIDs:map[] Name:server DNSs:[] ImageName: BaseHostname: RestartPolicy: Cmd:[] PubPort:[] ExpPort:[] Constraints:[] Mnts:[] Own:map[] NetworkCfg:map[] Foreign:map[] VimInstance:map[] VduService:map[]}
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf -> (*VnfmImpl ▶  server VNF has 1 VNFC(s)
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf -> GetCPsAndI ▶  Adding New Connection Point: &{ID: HbVersion:0 ProjectID: Shared:false Metadata:map[] Type:docker FixedIp: ChosenPool: VirtualLinkReference:new-network VirtualLinkReferenceId: FloatingIP:random InterfaceID:0}
+vnfm-docker-go_1      | 11:04:05 [DEBU] docker-vnf -> SaveConfig ▶  Saving config with id: 3dd6feea-2bbc-451f-b827-b00314d12ec7
+nfvo_1                | 2018-02-27 11:04:05.901 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.vnfm_reg.state.VnfStateHandler  : Looking for bean called: instantiateTask
+nfvo_1                | 2018-02-27 11:04:06.142  INFO 1 --- [tonAsyncTask-29] o.o.nfvo.vnfm_reg.state.VnfStateHandler  : Executing Task instantiateTask for vnfr server. Cyclic=false
+nfvo_1                | 2018-02-27 11:04:06.142  INFO 1 --- [tonAsyncTask-29] o.o.nfvo.vnfm_reg.state.VnfStateHandler  : Sent INSTANTIATE to VNF: server
+nfvo_1                | 2018-02-27 11:04:06.143 DEBUG 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Action is: INSTANTIATE
+nfvo_1                | 2018-02-27 11:04:06.144 DEBUG 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Previous status is: NULL
+nfvo_1                | 2018-02-27 11:04:06.145 DEBUG 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Changing status of VNFR: server ( 3dd6feea-2bbc-451f-b827-b00314d12ec7 ) to INITIALIZED
+nfvo_1                | 2018-02-27 11:04:06.145  INFO 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Start INSTANTIATE task for vnfr: server with VNFR ID 3dd6feea-2bbc-451f-b827-b00314d12ec7 his nsr id father is:a05e32f7-e193-4374-af6a-54dee67284d7
+nfvo_1                | 2018-02-27 11:04:06.205  INFO 1 --- [tonAsyncTask-30] o.o.nfvo.core.core.DependencyManagement  : Filling dependency Parameters for VirtualNetworkFunctionRecord source: server if existing
+nfvo_1                | 2018-02-27 11:04:06.311 DEBUG 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Filled dependency parameters of server
+nfvo_1                | 2018-02-27 11:04:06.313 DEBUG 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Added lifecycle event history: HistoryLifecycleEvent{event='INSTANTIATE', description='The instantiate lifecycle event was executed in this VNFR, this includes GRANT_OPERATION and ALLOCATE_RESOURCES', executedAt='2018.02.27-11:04:06:313-GMT'} BaseEntity{id='null', version=0, projectId='null', shared=false, metadata=null}
+nfvo_1                | 2018-02-27 11:04:06.521 DEBUG 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Saved VNFR server
+nfvo_1                | 2018-02-27 11:04:06.578 DEBUG 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : The current status of the NSR is NULL
+nfvo_1                | 2018-02-27 11:04:06.578 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.core.DependencyQueuer      : Doing release for VNFR id: server
+nfvo_1                | 2018-02-27 11:04:06.579  INFO 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Calling dependency management for VNFR: server
+nfvo_1                | 2018-02-27 11:04:06.579 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.core.DependencyManagement  : Provision dependencies for server
+nfvo_1                | 2018-02-27 11:04:06.642 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.core.DependencyManagement  : server is no target of a dependency
+nfvo_1                | 2018-02-27 11:04:06.642 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.core.DependencyManagement  : Found 0 dependencies for VNFR server ( 3dd6feea-2bbc-451f-b827-b00314d12ec7 ) 
+nfvo_1                | 2018-02-27 11:04:06.642  INFO 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Found 0 dependencies
+nfvo_1                | 2018-02-27 11:04:06.642 DEBUG 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Send start for server
+nfvo_1                | 2018-02-27 11:04:06.644  INFO 1 --- [tonAsyncTask-30] o.o.n.v.tasks.abstracts.AbstractTask     : Calling START to: server because it has 0 dependencies
+nfvo_1                | 2018-02-27 11:04:06.657 DEBUG 1 --- [tonAsyncTask-29] o.o.n.v.impl.sender.RabbitVnfmSender     : Sending NFVMessage with action: START to destination: docker
+vnfm-docker-go_1      | 11:04:06 [DEBU] docker-vnf -> handleNfvM ▶  Received Message START
+vnfm-docker-go_1      | 11:04:06 [DEBU] docker-vnf ->  getConfig ▶  Getting config with id: 3dd6feea-2bbc-451f-b827-b00314d12ec7
+nfvo_1                | 2018-02-27 11:04:06.667 DEBUG 1 --- [tonAsyncTask-30] org.openbaton.nfvo.vnfm_reg.VnfmManager  : The nsr id is: a05e32f7-e193-4374-af6a-54dee67284d7
+vnfm-docker-go_1      | 11:04:06 [ERRO] docker-vnf -> (*VnfmImpl ▶  Network with id [] not found
+vnfm-docker-go_1      | 11:04:06 [ERRO] docker-vnf -> handleMess ▶  &{json: cannot unmarshal array into Go value of type types.NetworkResource 0xc420277680 a05e32f7-e193-4374-af6a-54dee67284d7}
+nfvo_1                | 2018-02-27 11:04:06.682 DEBUG 1 --- [tonAsyncTask-28] o.o.nfvo.vnfm_reg.state.VnfStateHandler  : Looking for bean called: errorTask
+nfvo_1                | 2018-02-27 11:04:06.799 DEBUG 1 --- [tonAsyncTask-30] org.openbaton.nfvo.vnfm_reg.VnfmManager  : looking for NSD with id: 9fdc3f04-95fb-491f-a1e8-c5f86e444c61
+nfvo_1                | 2018-02-27 11:04:06.898 DEBUG 1 --- [tonAsyncTask-30] org.openbaton.nfvo.vnfm_reg.VnfmManager  : Checking the status of NSR: docker Iperf
+nfvo_1                | 2018-02-27 11:04:06.900 DEBUG 1 --- [tonAsyncTask-30] org.openbaton.nfvo.vnfm_reg.VnfmManager  : VNFR server is in state: INITIALIZED
+nfvo_1                | 2018-02-27 11:04:06.901 DEBUG 1 --- [tonAsyncTask-30] org.openbaton.nfvo.vnfm_reg.VnfmManager  : Setting NSR status to: INITIALIZED
+nfvo_1                | 2018-02-27 11:04:06.909  INFO 1 --- [tonAsyncTask-28] o.o.nfvo.vnfm_reg.state.VnfStateHandler  : Executing Task errorTask for vnfr server. Cyclic=false
+nfvo_1                | 2018-02-27 11:04:06.910 DEBUG 1 --- [tonAsyncTask-29] o.o.n.v.tasks.abstracts.AbstractTask     : Action is: ERROR
+nfvo_1                | 2018-02-27 11:04:06.910 DEBUG 1 --- [tonAsyncTask-29] o.o.n.v.tasks.abstracts.AbstractTask     : Previous status is: INITIALIZED
+nfvo_1                | 2018-02-27 11:04:06.910 DEBUG 1 --- [tonAsyncTask-29] o.o.n.v.tasks.abstracts.AbstractTask     : Changing status of VNFR: server ( 3dd6feea-2bbc-451f-b827-b00314d12ec7 ) to ERROR
+nfvo_1                | 2018-02-27 11:04:06.910 ERROR 1 --- [tonAsyncTask-29] o.o.n.v.tasks.abstracts.AbstractTask     : ERROR from VNFM: 
+nfvo_1                | 
+nfvo_1                | java.lang.Exception: json: cannot unmarshal array into Go value of type types.NetworkResource
+nfvo_1                | Caused by: java.lang.Throwable: json: cannot unmarshal array into Go value of type types.NetworkResource
+nfvo_1                | 
+nfvo_1                | 2018-02-27 11:04:06.994 ERROR 1 --- [tonAsyncTask-29] o.o.n.v.tasks.abstracts.AbstractTask     : Received ERROR message from VNFM related to VNFR: server
+nfvo_1                | 2018-02-27 11:04:06.996 DEBUG 1 --- [tonAsyncTask-29] o.o.n.v.tasks.abstracts.AbstractTask     : Added lifecycle event history: HistoryLifecycleEvent{event='ERROR', description='json: cannot unmarshal array into Go value of type types.NetworkResource', executedAt='2018.02.27-11:04:06:996-GMT'} BaseEntity{id='null', version=0, projectId='null', shared=false, metadata=null}
+nfvo_1                | 2018-02-27 11:04:07.037 DEBUG 1 --- [tonAsyncTask-30] org.openbaton.nfvo.vnfm_reg.VnfmManager  : Now the status is: INITIALIZED
+nfvo_1                | 2018-02-27 11:04:07.040 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.events.EventDispatcher     : Received event: org.openbaton.nfvo.common.internal.model.EventNFVO[source=org.openbaton.nfvo.vnfm_reg.tasks.InstantiateTask@7b2e14ae]
+nfvo_1                | 2018-02-27 11:04:07.040 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.events.EventDispatcher     : dispatching event to the world!!!
+nfvo_1                | 2018-02-27 11:04:07.040 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.events.EventDispatcher     : event is: org.openbaton.nfvo.common.internal.model.EventNFVO[source=org.openbaton.nfvo.vnfm_reg.tasks.InstantiateTask@7b2e14ae]
+nfvo_1                | 2018-02-27 11:04:07.049 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.events.EventDispatcher     : Checking endpoint: EventEndpoint{name='Subscription:ERROR', networkServiceId='null', virtualNetworkFunctionId='null', type=REST, endpoint='http://autoscaling-engine:9999/elasticity-management/ERROR', event=ERROR, description='null', status='null'} BaseEntity{id='1e223270-0bcf-49bb-b0fe-f7cc4736a28a', version=0, projectId='2c638200-0a43-41d4-b686-6d472660ff94', shared=false, metadata={}}
+nfvo_1                | 2018-02-27 11:04:07.052 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.events.EventDispatcher     : Checking endpoint: EventEndpoint{name='Subscription:INSTANTIATE_FINISH', networkServiceId='null', virtualNetworkFunctionId='null', type=REST, endpoint='http://autoscaling-engine:9999/elasticity-management/INSTANTIATE_FINISH', event=INSTANTIATE_FINISH, description='null', status='null'} BaseEntity{id='cda2e429-5be2-4077-b829-ff7c4c4168e9', version=0, projectId='2c638200-0a43-41d4-b686-6d472660ff94', shared=false, metadata={}}
+nfvo_1                | 2018-02-27 11:04:07.052 DEBUG 1 --- [tonAsyncTask-30] o.o.nfvo.core.events.EventDispatcher     : Checking endpoint: EventEndpoint{name='Subscription:RELEASE_RESOURCES_FINISH', networkServiceId='null', virtualNetworkFunctionId='null', type=REST, endpoint='http://autoscaling-engine:9999/elasticity-management/RELEASE_RESOURCES_FINISH', event=RELEASE_RESOURCES_FINISH, description='null', status='null'} BaseEntity{id='fa285b85-1e17-4fdd-9df5-f9e7479259a9', version=0, projectId='2c638200-0a43-41d4-b686-6d472660ff94', shared=false, metadata={}}
+nfvo_1                | 2018-02-27 11:04:07.154 DEBUG 1 --- [tonAsyncTask-29] org.openbaton.nfvo.vnfm_reg.VnfmManager  : The nsr id is: a05e32f7-e193-4374-af6a-54dee67284d7
+nfvo_1                | 2018-02-27 11:04:07.200 DEBUG 1 --- [tonAsyncTask-29] org.openbaton.nfvo.vnfm_reg.VnfmManager  : looking for NSD with id: 9fdc3f04-95fb-491f-a1e8-c5f86e444c61
+nfvo_1                | 2018-02-27 11:04:07.254 DEBUG 1 --- [tonAsyncTask-29] org.openbaton.nfvo.vnfm_reg.VnfmManager  : Checking the status of NSR: docker Iperf
+nfvo_1                | 2018-02-27 11:04:07.254 DEBUG 1 --- [tonAsyncTask-29] org.openbaton.nfvo.vnfm_reg.VnfmManager  : VNFR server is in state: ERROR
+nfvo_1                | 2018-02-27 11:04:07.254 DEBUG 1 --- [tonAsyncTask-29] org.openbaton.nfvo.vnfm_reg.VnfmManager  : Setting NSR status to: ERROR
+nfvo_1                | 2018-02-27 11:04:07.346 DEBUG 1 --- [tonAsyncTask-29] org.openbaton.nfvo.vnfm_reg.VnfmManager  : Now the status is: ERROR
+nfvo_1                | 2018-02-27 11:04:07.346 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.core.events.EventDispatcher     : Received event: org.openbaton.nfvo.common.internal.model.EventNFVO[source=org.openbaton.nfvo.vnfm_reg.tasks.ErrorTask@3dd8a7c3]
+nfvo_1                | 2018-02-27 11:04:07.346 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.core.events.EventDispatcher     : dispatching event to the world!!!
+nfvo_1                | 2018-02-27 11:04:07.347 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.core.events.EventDispatcher     : event is: org.openbaton.nfvo.common.internal.model.EventNFVO[source=org.openbaton.nfvo.vnfm_reg.tasks.ErrorTask@3dd8a7c3]
+nfvo_1                | 2018-02-27 11:04:07.349 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.core.events.EventDispatcher     : Checking endpoint: EventEndpoint{name='Subscription:ERROR', networkServiceId='null', virtualNetworkFunctionId='null', type=REST, endpoint='http://autoscaling-engine:9999/elasticity-management/ERROR', event=ERROR, description='null', status='null'} BaseEntity{id='1e223270-0bcf-49bb-b0fe-f7cc4736a28a', version=0, projectId='2c638200-0a43-41d4-b686-6d472660ff94', shared=false, metadata={}}
+nfvo_1                | 2018-02-27 11:04:07.353 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.core.events.EventDispatcher     : dispatching event to: EventEndpoint{name='Subscription:ERROR', networkServiceId='null', virtualNetworkFunctionId='null', type=REST, endpoint='http://autoscaling-engine:9999/elasticity-management/ERROR', event=ERROR, description='null', status='null'} BaseEntity{id='1e223270-0bcf-49bb-b0fe-f7cc4736a28a', version=0, projectId='2c638200-0a43-41d4-b686-6d472660ff94', shared=false, metadata={}}
+nfvo_1                | 2018-02-27 11:04:07.353 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.core.events.EventDispatcher     : Sender is: $Proxy165
+nfvo_1                | 2018-02-27 11:04:07.359 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.core.events.EventDispatcher     : Checking endpoint: EventEndpoint{name='Subscription:INSTANTIATE_FINISH', networkServiceId='null', virtualNetworkFunctionId='null', type=REST, endpoint='http://autoscaling-engine:9999/elasticity-management/INSTANTIATE_FINISH', event=INSTANTIATE_FINISH, description='null', status='null'} BaseEntity{id='cda2e429-5be2-4077-b829-ff7c4c4168e9', version=0, projectId='2c638200-0a43-41d4-b686-6d472660ff94', shared=false, metadata={}}
+nfvo_1                | 2018-02-27 11:04:07.360 DEBUG 1 --- [tonAsyncTask-29] o.o.nfvo.core.events.EventDispatcher     : Checking endpoint: EventEndpoint{name='Subscription:RELEASE_RESOURCES_FINISH', networkServiceId='null', virtualNetworkFunctionId='null', type=REST, endpoint='http://autoscaling-engine:9999/elasticity-management/RELEASE_RESOURCES_FINISH', event=RELEASE_RESOURCES_FINISH, description='null', status='null'} BaseEntity{id='fa285b85-1e17-4fdd-9df5-f9e7479259a9', version=0, projectId='2c638200-0a43-41d4-b686-6d472660ff94', shared=false, metadata={}}
+
