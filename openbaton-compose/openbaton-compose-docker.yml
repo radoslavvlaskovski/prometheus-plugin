@@ -9,7 +9,6 @@ services:
     restart: always
     environment:
       - NFVO_RABBIT_BROKERIP=rabbitmq_broker # for use in userdata.sh in vnfm-generic
-      - NFVO_MONITORING_IP=${MONITORING_IP}
       - NFVO_PLUGIN_INSTALLATION-DIR=plugins
       - SPRING_RABBITMQ_HOST=rabbitmq_broker
       - SPRING_DATASOURCE_URL=jdbc:mysql://nfvo_database:3306/openbaton
@@ -32,18 +31,8 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:rw
-  autoscaling-engine:
-    build: ase
-    depends_on:
-      - nfvo
-    restart: always
-    environment:
-      - ASE_RABBITMQ_BROKERIP=rabbitmq_broker
-      - ASE_SERVER_IP=autoscaling-engine
-      - NFVO_IP=nfvo
-      - PLUGIN_IP=${MONITORING_IP}
   nfvo_database:
-    image: mysql/mysql-server
+    image: mysql/mysql-server:5.7.20
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=true
       - MYSQL_DATABASE=openbaton
