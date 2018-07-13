@@ -1,4 +1,4 @@
-FROM openbaton/driver-docker-go:5.0.0
+FROM openbaton/driver-docker-go:latest
 
 ADD config.toml .
 

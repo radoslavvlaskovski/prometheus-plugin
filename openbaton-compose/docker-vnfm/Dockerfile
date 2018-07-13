@@ -1,5 +1,5 @@
-FROM openbaton/vnfm-docker-go:5.0.0
+FROM openbaton/vnfm-docker-go:latest
 
 ADD config.toml .
 
-ENTRYPOINT ./goapp -conf config.toml
+ENTRYPOINT ./go-docker-vnfm -conf config.toml

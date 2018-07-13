@@ -1,4 +1,4 @@
-FROM openbaton/nfvo:5.2.0
+FROM openbaton/nfvo:latest
 
 COPY application.properties /etc/openbaton/openbaton-nfvo.properties
 
