@@ -18,12 +18,13 @@ services:
     ports:
       - "8080:8080"
   vnfm-docker-go:
-    build: docker-vnfm
+    image: openbaton/vnfm-docker-go:latest
     depends_on:
       - nfvo
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:rw
+    entrypoint: ./go-docker-vnfm -ip rabbitmq_broker 
   driver-docker-go:
     build: docker-driver
     depends_on:
